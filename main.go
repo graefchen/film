@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/anthonynsimon/bild/imgio"
 	"github.com/anthonynsimon/bild/transform"
 	"github.com/jameycribbs/hare"
 	"github.com/jameycribbs/hare/datastores/disk"
-	"github.com/osteele/liquid"
 	"github.com/spf13/cobra"
+	"github.com/valyala/fasttemplate"
 )
 
 var (
@@ -86,18 +85,12 @@ func build(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	engine := liquid.NewEngine()
-	template := `<h1>{{ page.title }}</h1>`
-	bindings := map[string]any{
-		"page": map[string]string{
-			"title": "Introduction",
-		},
-	}
-	out, err := engine.ParseAndRenderString(template, bindings)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println(out)
+	template := "<h1>{{ string }}</h1>"
+	t := fasttemplate.New(template, "{{", "}}")
+	s := t.ExecuteString(map[string]interface{}{
+		"string": "Hello, World!",
+	})
+	fmt.Println(s)
 }
 
 func init() {

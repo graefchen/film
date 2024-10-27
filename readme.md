@@ -23,6 +23,7 @@ Use go with following deps:
   - https://pkg.go.dev/html/template
   - https://github.com/a-h/templ
   - https://github.com/osteele/liquid
+  - https://github.com/valyala/fasttemplate
 - storage
   - https://pkg.go.dev/encoding/json
   - https://github.com/jameycribbs/hare

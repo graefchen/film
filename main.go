@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image"
 	"os"
 	"strconv"
 
@@ -19,7 +20,12 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "film",
 		Short: "film is a static photoblog generator",
-		Run:   func(cmd *cobra.Command, args []string) {},
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
 	}
 
 	versionCmd = &cobra.Command{
@@ -80,8 +86,9 @@ var PType PictureType = PictureType{
 func openDB() *hare.Database {
 	ds, err := disk.New("./film", ".json")
 	if err != nil {
-		fmt.Println("Could not finde the 'film.json' file.\nDid you use 'film init'?")
-		os.Exit(1)
+		fmt.Println(err)
+		// fmt.Println("Could not finde the 'film.json' file.\nDid you use 'film init'?")
+		// os.Exit(1)
 	}
 	db, err := hare.New(ds)
 	if err != nil {
@@ -91,10 +98,49 @@ func openDB() *hare.Database {
 
 }
 
+// Picure Helpers
+
+type PictureSize struct {
+	width  int
+	height int
+}
+
+func newPictureSize(width int, height int) *PictureSize {
+	ps := PictureSize{width: width, height: height}
+	return &ps
+}
+
+func resizePicture(img image.Image, sizes []PictureSize) ([]image.Image, error) {
+	pictures := []image.Image{}
+	for _, size := range sizes {
+		// refactor into an own function that can *dynamically*
+		// resize the picture to make it way more resiliant
+		resized := transform.Resize(img, size.width, size.height, transform.Linear)
+		pictures = append(pictures, resized)
+
+	}
+	return pictures, nil
+}
+
+func savePictures(img []image.Image, id int) {
+	for _, resize := range img {
+		if err := imgio.Save(strconv.Itoa(id)+".jpg", resize, imgio.JPEGEncoder(100)); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+}
+
 // Start of commands
 
 func initFilm(cmd *cobra.Command, args []string) {
 	fmt.Println("Init...")
+	// aks for the needed information to create
+	// a new photoblog ...
+
+	// creating the json file
+	// os.Create("film.json")
+	fmt.Println("End init...")
 }
 
 func addPicture(cmd *cobra.Command, args []string) {
@@ -112,15 +158,22 @@ func buildPictureSite(picture string, title string, id int) {
 		return
 	}
 
-	// refactor into an own function that can *dynamically*
-	// resize the picture to make it way more resiliant
-	resized := transform.Resize(img, 400, 400, transform.Linear)
-	if err := imgio.Save(strconv.Itoa(id)+".jpg", resized, imgio.JPEGEncoder(100)); err != nil {
+	sizes := []PictureSize{
+		{width: 400, height: 400},
+		*newPictureSize(800, 800),
+	}
+
+	fmt.Println(sizes)
+
+	resized, err := resizePicture(img, sizes)
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	template := "<html><h1>{{title}}</h1></html>"
+	savePictures(resized, id)
+
+	template := "<html><body><h1>{{title}}</h1></body></html>"
 	t := fasttemplate.New(template, "{{", "}}")
 	s := t.ExecuteString(map[string]interface{}{
 		"title": title,
@@ -134,7 +187,6 @@ func buildArchiveSite() {
 
 func build(cmd *cobra.Command, args []string) {
 	db := openDB()
-	fmt.Println("Build...")
 	buildPictureSite("picture.jpg", "", 1)
 	buildArchiveSite()
 	db.Close()

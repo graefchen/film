@@ -5,6 +5,7 @@ import (
 	"image"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/anthonynsimon/bild/imgio"
 	"github.com/anthonynsimon/bild/transform"
@@ -84,7 +85,7 @@ var PType PictureType = PictureType{
 // DB Helpers
 
 func openDB() *hare.Database {
-	ds, err := disk.New("./film", ".json")
+	ds, err := disk.New("./.film", ".json")
 	if err != nil {
 		fmt.Println(err)
 		// fmt.Println("Could not finde the 'film.json' file.\nDid you use 'film init'?")
@@ -98,7 +99,7 @@ func openDB() *hare.Database {
 
 }
 
-// Picure Helpers
+// Picture Helpers
 
 type PictureSize struct {
 	width  int
@@ -122,9 +123,11 @@ func resizePicture(img image.Image, sizes []PictureSize) ([]image.Image, error) 
 	return pictures, nil
 }
 
-func savePictures(img []image.Image, id int) {
+func savePictures(title string, img []image.Image, id int) {
 	for _, resize := range img {
-		if err := imgio.Save(strconv.Itoa(id)+".jpg", resize, imgio.JPEGEncoder(100)); err != nil {
+		dim := strconv.Itoa(resize.Bounds().Max.X) + strconv.Itoa(resize.Bounds().Max.Y)
+		name := dim + strconv.Itoa(id) + title + ".jpg"
+		if err := imgio.Save(name, resize, imgio.JPEGEncoder(100)); err != nil {
 			fmt.Println(err)
 			return
 		}
@@ -138,8 +141,11 @@ func initFilm(cmd *cobra.Command, args []string) {
 	// aks for the needed information to create
 	// a new photoblog ...
 
-	// creating the json file
-	// os.Create("film.json")
+	// creating the .film direcrory
+	err := os.Mkdir(".film", os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println("End init...")
 }
 
@@ -152,7 +158,6 @@ func addPicture(cmd *cobra.Command, args []string) {
 func buildPictureSite(picture string, title string, id int) {
 	// opening the image and getting the bounds to use them later
 	img, err := imgio.Open(picture)
-	fmt.Println(img.Bounds().String())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -163,15 +168,13 @@ func buildPictureSite(picture string, title string, id int) {
 		*newPictureSize(800, 800),
 	}
 
-	fmt.Println(sizes)
-
 	resized, err := resizePicture(img, sizes)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	savePictures(resized, id)
+	savePictures(strings.Split(picture, ".")[0], resized, id)
 
 	template := "<html><body><h1>{{title}}</h1></body></html>"
 	t := fasttemplate.New(template, "{{", "}}")
@@ -187,7 +190,7 @@ func buildArchiveSite() {
 
 func build(cmd *cobra.Command, args []string) {
 	db := openDB()
-	buildPictureSite("picture.jpg", "", 1)
+	buildPictureSite("picture.jpg", "Ticky", 1)
 	buildArchiveSite()
 	db.Close()
 }

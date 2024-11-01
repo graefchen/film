@@ -38,29 +38,70 @@ more help: https://github.com/avelino/awesome-go
 
 print version
 
-### init
+```bash
+$ film
+```
 
-initialize a foto project
+### help
+
+The help message for the command
+
+```bash
+$ film help
+Create a fotoblog
+```
+
+### create
+
+create a foto project
+
+```bash
+$ film create --help
+```
 
 ### add
 
 add image or directory to database
 
+```bash
+$ film add --help
+```
+
 `-t | --title` to give a title (else the image name is choosen)
 `-d | --date` add an custome date
+`--directory` add every photo that is inside the directory
 
 ### remove
 
 removes an image
 
+```bash
+$ film remove --help
+```
+
 ### list
 
 list currently used images
 
+```bash
+$ film list --help
+```
+
 ### build
 
-build the blog
+build the blog into a directory
+
+```bash
+$ film build --help
+```
 
 <!-- ### serve
 
 build and serve the blog on localhost -->
+
+## project directorys
+
+```
+.
+└── .film
+```

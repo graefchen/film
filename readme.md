@@ -59,6 +59,8 @@ create a foto project
 $ film create --help
 ```
 
+Ask for specifics and so on like: "Name of your new project: `user input`", wait for user input and then execute these.
+
 ### add
 
 add image or directory to database
@@ -95,13 +97,6 @@ build the blog into a directory
 $ film build --help
 ```
 
-<!-- ### serve
-
-build and serve the blog on localhost -->
-
 ## project directorys
 
-```
-.
-└── .film
-```
+TODO: Write it

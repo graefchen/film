@@ -68,28 +68,14 @@ var (
 	}
 )
 
-// Picture Helpers
-
-type PictureType struct {
-	OTHER int
-	JPEG  int
-	PNG   int
-}
-
-var PType PictureType = PictureType{
-	OTHER: 0,
-	JPEG:  1,
-	PNG:   2,
-}
-
 // DB Helpers
 
 func openDB() *hare.Database {
 	ds, err := disk.New("./.film", ".json")
 	if err != nil {
-		fmt.Println(err)
-		// fmt.Println("Could not finde the 'film.json' file.\nDid you use 'film init'?")
-		// os.Exit(1)
+		// fmt.Println(err)
+		fmt.Println("Could not finde the '.film' directory.\nDid you use 'film init'?")
+		os.Exit(1)
 	}
 	db, err := hare.New(ds)
 	if err != nil {

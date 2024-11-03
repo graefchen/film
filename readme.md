@@ -71,7 +71,6 @@ $ film add --help
 
 `-t | --title` to give a title (else the image name is choosen)
 `-d | --date` add an custome date
-`--directory` add every photo that is inside the directory
 
 ### remove
 
@@ -97,6 +96,16 @@ build the blog into a directory
 $ film build --help
 ```
 
-## project directorys
+## generated site
 
-TODO: Write it
+### home
+
+The most recent picture
+
+### &lt;id&gt;
+
+The site that generates the picture of id
+
+### archive
+
+An archive that displays all the pictures in a masonry-like grid

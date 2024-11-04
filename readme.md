@@ -30,6 +30,9 @@ Use go with following deps:
   - https://github.com/jameycribbs/hare
   - https://github.com/ostafen/clover
   - https://github.com/akyoto/cache
+- config
+  - https://github.com/spf13/viper
+  - https://github.com/tucnak/store
 
 more help: https://github.com/avelino/awesome-go
 

@@ -1,13 +1,14 @@
 # film
 
-_a photoblog generator_
+🎞 _a photoblog generator_
 
 inspired by photoblog generators:
 
-- [1600pr.sh](https://github.com/andersju/1600pr.sh)
-- [Exposé](https://github.com/Jack000/Expose)
-- [Sigal](https://github.com/saimn/sigal/)
-- [foto](https://github.com/waynezhang/foto)
+1. [moul](https://github.com/moul-co/moul)
+2. [foto](https://github.com/waynezhang/foto)
+3. [1600pr.sh](https://github.com/andersju/1600pr.sh)
+4. [Exposé](https://github.com/Jack000/Expose)
+5. [Sigal](https://github.com/saimn/sigal/)
 
 Dead simple go code. Photo Gallery like Polaroid(?)
 Use go with following deps:
@@ -32,24 +33,13 @@ Use go with following deps:
 
 more help: https://github.com/avelino/awesome-go
 
+## goals
+
+- simple/easy
+- fast
+- small
+
 ## commands
-
-### version
-
-print version
-
-```bash
-$ film
-```
-
-### help
-
-The help message for the command
-
-```bash
-$ film help
-Create a fotoblog
-```
 
 ### create
 
@@ -59,53 +49,45 @@ create a foto project
 $ film create --help
 ```
 
-Ask for specifics and so on like: "Name of your new project: `user input`", wait for user input and then execute these.
+Ask for specifics and so on like: "Name of your new project: `user input`",
+wait for user input and then execute these.
 
-### add
+Ask for:
 
-add image or directory to database
+- project name
 
-```bash
-$ film add --help
-```
+### preview
 
-`-t | --title` to give a title (else the image name is choosen)
-`-d | --date` add an custome date
+open server and show the pictures
 
-### remove
-
-removes an image
-
-```bash
-$ film remove --help
-```
-
-### list
-
-list currently used images
-
-```bash
-$ film list --help
-```
-
-### build
+### export
 
 build the blog into a directory
 
 ```bash
-$ film build --help
+$ film export --help
 ```
 
 ## generated site
+
+```bash
+$ tree
+.
+├── _site/
+└── film
+
+```
 
 ### home
 
 The most recent picture
 
-### &lt;id&gt;
+### _&lt;number&gt;_
 
-The site that generates the picture of id
+The site that generates the picture with _number_
 
 ### archive
 
 An archive that displays all the pictures in a masonry-like grid
+
+![example](example.jpg)

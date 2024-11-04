@@ -9,8 +9,6 @@ import (
 
 	"github.com/anthonynsimon/bild/imgio"
 	"github.com/anthonynsimon/bild/transform"
-	"github.com/jameycribbs/hare"
-	"github.com/jameycribbs/hare/datastores/disk"
 	"github.com/spf13/cobra"
 	"github.com/valyala/fasttemplate"
 )
@@ -29,61 +27,16 @@ var (
 		},
 	}
 
-	versionCmd = &cobra.Command{
-		Use:   "version",
-		Short: "Print the version number of Film",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("film ∞")
-		},
-	}
-
 	initCmd = &cobra.Command{
-		Use:   "init",
-		Short: "Initialize a project",
-		Run:   initFilm,
+		Use: "create",
+		Run: create,
 	}
 
-	addCmd = &cobra.Command{
-		Use:   "add",
-		Short: "add a picture",
-		Run:   addPicture,
-	}
-
-	removeCommand = &cobra.Command{
-		Use:   "remove",
-		Short: "removes a picture",
-		Run:   func(cmd *cobra.Command, args []string) {},
-	}
-
-	listCommand = &cobra.Command{
-		Use:   "remove",
-		Short: "removes a picture",
-		Run:   func(cmd *cobra.Command, args []string) {},
-	}
-
-	buildCmd = &cobra.Command{
-		Use:   "build",
-		Short: "build the picture blog",
-		Run:   build,
+	exportCmd = &cobra.Command{
+		Use: "export",
+		Run: export,
 	}
 )
-
-// DB Helpers
-
-func openDB() *hare.Database {
-	ds, err := disk.New("./.film", ".json")
-	if err != nil {
-		// fmt.Println(err)
-		fmt.Println("Could not finde the '.film' directory.\nDid you use 'film init'?")
-		os.Exit(1)
-	}
-	db, err := hare.New(ds)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return db
-
-}
 
 // Picture Helpers
 
@@ -100,8 +53,6 @@ func newPictureSize(width int, height int) *PictureSize {
 func resizePicture(img image.Image, sizes []PictureSize) ([]image.Image, error) {
 	pictures := []image.Image{}
 	for _, size := range sizes {
-		// refactor into an own function that can *dynamically*
-		// resize the picture to make it way more resiliant
 		resized := transform.Resize(img, size.width, size.height, transform.Linear)
 		pictures = append(pictures, resized)
 
@@ -111,7 +62,7 @@ func resizePicture(img image.Image, sizes []PictureSize) ([]image.Image, error) 
 
 func savePictures(title string, img []image.Image, id int) {
 	for _, resize := range img {
-		dim := strconv.Itoa(resize.Bounds().Max.X) + strconv.Itoa(resize.Bounds().Max.Y)
+		dim := strconv.Itoa(resize.Bounds().Max.X) + "_" + strconv.Itoa(resize.Bounds().Max.Y)
 		name := dim + strconv.Itoa(id) + title + ".jpg"
 		if err := imgio.Save(name, resize, imgio.JPEGEncoder(100)); err != nil {
 			fmt.Println(err)
@@ -122,23 +73,11 @@ func savePictures(title string, img []image.Image, id int) {
 
 // Start of commands
 
-func initFilm(cmd *cobra.Command, args []string) {
-	fmt.Println("Init...")
-	// aks for the needed information to create
-	// a new photoblog ...
-
-	// creating the .film direcrory
-	err := os.Mkdir(".film", os.ModePerm)
+func create(cmd *cobra.Command, args []string) {
+	err := os.Mkdir("film", os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("End init...")
-}
-
-func addPicture(cmd *cobra.Command, args []string) {
-	db := openDB()
-
-	db.Close()
 }
 
 func buildPictureSite(picture string, title string, id int) {
@@ -148,10 +87,12 @@ func buildPictureSite(picture string, title string, id int) {
 		fmt.Println(err)
 		return
 	}
+	x := img.Bounds().Min.X
+	y := img.Bounds().Min.X
 
 	sizes := []PictureSize{
-		{width: 400, height: 400},
-		*newPictureSize(800, 800),
+		*newPictureSize(x/2, y/2),
+		*newPictureSize(x/4*3, y/4*3),
 	}
 
 	resized, err := resizePicture(img, sizes)
@@ -170,20 +111,13 @@ func buildPictureSite(picture string, title string, id int) {
 	fmt.Println(s)
 }
 
-func buildArchiveSite() {
-
-}
-
-func build(cmd *cobra.Command, args []string) {
-	db := openDB()
-	buildPictureSite("picture.jpg", "Ticky", 1)
-	buildArchiveSite()
-	db.Close()
+func export(cmd *cobra.Command, args []string) {
+	buildPictureSite("tine.jpg", "Tine", 1)
 }
 
 func init() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
-	rootCmd.AddCommand(versionCmd, initCmd, addCmd, buildCmd, removeCommand, listCommand)
+	rootCmd.AddCommand(initCmd, exportCmd)
 }
 
 func main() {

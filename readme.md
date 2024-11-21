@@ -10,8 +10,7 @@ inspired by photoblog generators:
 4. [Exposé](https://github.com/Jack000/Expose)
 5. [Sigal](https://github.com/saimn/sigal/)
 
-Dead simple go code. Photo Gallery like Polaroid(?)
-Use go with following deps:
+Dead simple go code. Photo Gallery like Polaroid(?) Use go with following deps:
 
 - command line arguments
   - https://pkg.go.dev/flag
@@ -52,8 +51,8 @@ create a foto project
 $ film create --help
 ```
 
-Ask for specifics and so on like: "Name of your new project: `user input`",
-wait for user input and then execute these.
+Ask for specifics and so on like: "Name of your new project: `user input`", wait
+for user input and then execute these.
 
 Ask for:
 
@@ -76,9 +75,7 @@ $ film export --help
 ```bash
 $ tree
 .
-├── _site/
-└── film
-
+└── film.yaml
 ```
 
 ### home

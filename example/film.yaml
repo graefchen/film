@@ -1,0 +1,14 @@
+site:
+  name: graef's catblog
+  author: graef
+  root: /
+  output-dir: _film
+  template:
+
+photos:
+  - file: picture.jpg
+    name: Ticky
+    resize: true
+  - file:
+    name: Tine
+    resize: false

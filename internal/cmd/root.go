@@ -11,7 +11,6 @@ var rootCmd = &cobra.Command{
 	Use:   "film",
 	Short: "film...",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello World")
 		cmd.Help()
 	},
 }

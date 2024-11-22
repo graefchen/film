@@ -7,9 +7,10 @@ import (
 )
 
 type fileConfig struct {
-	v        *viper.Viper
-	siteDate SiteData
-	photos   []Photo
+	v            *viper.Viper
+	siteDate     SiteData
+	templateData TemplateData
+	photos       []Photo
 }
 
 func NewFileConfig(file string) Config {
@@ -28,6 +29,7 @@ func NewFileConfig(file string) Config {
 	config := fileConfig{v: v}
 
 	_ = v.UnmarshalKey("site", &config.siteDate)
+	_ = v.UnmarshalKey("templates", &config.templateData)
 	_ = v.UnmarshalKey("photos", &config.photos)
 
 	return config
@@ -35,6 +37,10 @@ func NewFileConfig(file string) Config {
 
 func (f fileConfig) GetSiteData() SiteData {
 	return f.siteDate
+}
+
+func (f fileConfig) GetTemplateData() TemplateData {
+	return f.templateData
 }
 
 func (f fileConfig) GetPhotos() []Photo {

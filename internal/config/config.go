@@ -2,15 +2,20 @@ package config
 
 type Config interface {
 	GetSiteData() SiteData
+	GetTemplateData() TemplateData
 	GetPhotos() []Photo
 }
 
 type SiteData struct {
-	Name     string
-	Author   string
-	Root     string
-	Output   string
-	Template string
+	Name      string
+	Author    string
+	Root      string
+	OutputDir string
+}
+
+type TemplateData struct {
+	Archive string
+	Site    string
 }
 
 type Photo struct {

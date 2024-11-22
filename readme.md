@@ -58,9 +58,9 @@ Ask for:
 
 - project name
 
-### preview
+<!-- ### preview
 
-open server and show the pictures
+open server and show the pictures -->
 
 ### export
 

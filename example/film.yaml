@@ -2,8 +2,11 @@ site:
   name: graef's catblog
   author: graef
   root: /
-  output-dir: _film
-  template:
+  outputDir: _film
+
+template:
+  archive:
+  site:
 
 photos:
   - file: picture.jpg

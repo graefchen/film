@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"film/internal/config"
-	"fmt"
+	"film/internal/export"
 
 	"github.com/spf13/cobra"
 )
@@ -10,10 +9,6 @@ import (
 var exportCmd = &cobra.Command{
 	Use: "export",
 	Run: func(cmd *cobra.Command, args []string) {
-		config := config.FilmConfig()
-
-		outDir := config.GetSiteData().OutputDir
-		fmt.Println(outDir)
-		fmt.Println(config)
+		export.Export()
 	},
 }

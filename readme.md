@@ -56,11 +56,22 @@ for user input and then execute these.
 
 Ask for:
 
-- project name
+- site
+  - blog name
+  - author
+  - root
+  - output
+- template
+  - archive
+  - site
 
 <!-- ### preview
 
 open server and show the pictures -->
+
+### version
+
+### add
 
 ### export
 

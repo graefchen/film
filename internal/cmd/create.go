@@ -9,9 +9,14 @@ import (
 var createCmd = &cobra.Command{
 	Use: "create",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print("What is the name of your blog? ")
-		var input string
-		fmt.Scanln(&input)
-		fmt.Print(input)
+		name := askFor("What is the name of your blog? ")
+		println(name)
 	},
+}
+
+func askFor(message string) string {
+	fmt.Print(message)
+	var input string
+	fmt.Scanln(&input)
+	return input
 }

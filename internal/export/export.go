@@ -1,7 +1,16 @@
 package export
 
-import "fmt"
+import (
+	"film/internal/config"
+	"fmt"
+)
 
 func Export() {
-	fmt.Println("Export...")
+	// config
+	config := config.FilmConfig()
+
+	// reading the config
+	outDir := config.GetSiteData().OutputDir
+	fmt.Println(outDir)
+	fmt.Println(config)
 }

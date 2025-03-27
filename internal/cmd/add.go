@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	"film/internal/export"
-
 	"github.com/spf13/cobra"
 )
 
-var exportCmd = &cobra.Command{
-	Use: "export",
+var addCmd = &cobra.Command{
+	Use: "add",
 	Run: func(cmd *cobra.Command, args []string) {
-		export.Export()
 	},
 }
